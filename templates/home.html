@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: url('https://source.unsplash.com/1600x900/?nature,water') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .registration-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        .registration-container h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #444;
+        }
+
+        .registration-container input[type="text"],
+        .registration-container input[type="email"],
+        .registration-container input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .registration-container input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .registration-container input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        .registration-container .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .registration-container .success {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .registration-container .login-link {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .registration-container .login-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .registration-container .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <h2>Регистрация</h2>
+        <form method="post" action="{% url 'home:register' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Имя пользователя" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password1" placeholder="Пароль" required>
+            <input type="password" name="password2" placeholder="Подтвердите пароль" required>
+            <input type="submit" value="Зарегистрироваться">
+        </form>
+        {% if form.errors %}
+            <div class="error">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if success_message %}
+            <div class="success">{{ success_message }}</div>
+        {% endif %}
+
+        <!-- Ссылка на страницу входа -->
+        <div class="login-link">
+            Уже зарегистрированы? <a href="{% url 'home:login' %}">Войти</a>
+        </div>
+    </div>
+</body>
+</html>
