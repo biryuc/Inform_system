@@ -23,15 +23,10 @@ def home(request):
     return render(request, 'home.html')
     
 
-@login_required  # Требуется авторизация для доступа к странице
+@login_required 
 def temperature_charts(request):
 
-    # Здесь можно добавить логику для получения данных о температурах
     
-    
-    #temperature_data = get_temperature_data()
-
-    # Проверка логина пользователя
     if request.user.username == 'user1':
         temperature_data = [
         {"sensor": "Sensor 1", "temperature": 22.5},
@@ -107,7 +102,7 @@ def show_graph2(request):
 def register(request):
 
     if request.user.is_authenticated:
-        return redirect('home:temperature_charts')  # Перенаправление на страницу с графиками
+        return redirect('home:temperature_charts')  
         
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -115,7 +110,7 @@ def register(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        # Validate form data
+        
         if password1 != password2:
             messages.error(request, "Пароли не совпадают.")
         elif User.objects.filter(username=username).exists():
@@ -123,10 +118,10 @@ def register(request):
         elif User.objects.filter(email=email).exists():
             messages.error(request, "Email уже зарегистрирован.")
         else:
-            # Create user
+            
             user = User.objects.create_user(username=username, email=email, password=password1)
             user.save()
-            print(f"Пользователь {username} успешно создан!")  # Отладочное сообщение
+            
             messages.success(request, "Регистрация прошла успешно!")
             return redirect('home:login')  # Redirect to login page
 
@@ -136,18 +131,17 @@ def register(request):
 def user_login(request):
     
     #if request.user.is_authenticated:
-       # return redirect('home:temperature_charts')  # Перенаправление на страницу с графиками
+       # return redirect('home:temperature_charts')  
     
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Аутентификация пользователя
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             messages.success(request, "Вы успешно вошли в систему!")
-            return redirect('home:temperature_charts')  # Перенаправление на страницу с графиками
+            return redirect('home:temperature_charts')  
         else:
             messages.error(request, "Неверное имя пользователя или пароль.")
 
